@@ -1,0 +1,39 @@
+﻿@using LaPieCassiette.Application.DTOs;
+@using LaPieCassiette.Domain.Models;
+@model ProductDto;
+
+<h1>Créer un produit</h1>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div>
+        <label>Nom</label>
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label>Catégorie</label>
+        <select asp-for="Category">
+            <option>Entrées</option>
+            <option>Plats</option>
+            <option>Desserts</option>
+            <option>Boissons</option>
+        </select>
+    </div>
+    <div>
+        <label>Description</label>
+        <input asp-for="Description" />
+    </div>
+
+    <div>
+        <label>Prix</label>
+        <input asp-for="Price" />
+    </div>
+
+    <div>
+        <label>Image</label>
+        <input type="file" name="image" />
+    </div>
+
+    <button type="submit">Créer</button>
+
+</form>

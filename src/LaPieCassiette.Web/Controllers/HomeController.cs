@@ -1,31 +1,42 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using LaPieCassiette.Web.Models;
+using LaPieCassiette.Application;
+using LaPieCassiette.Domain.Models;
 
 namespace LaPieCassiette.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IProductService _service;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IProductService service)
     {
-        _logger = logger;
+        _service = service;
     }
 
     public IActionResult Index()
     {
-        return View();
-    }
+        var products = _service.GetProducts()
+                               .Where(p => p.IsPublished)
+                               .ToList();
 
-    public IActionResult Privacy()
-    {
-        return View();
+        return View(products);
     }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Detail(int id)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var product = _service.GetById(id);
+
+        if (product == null)
+            return NotFound();
+
+        return View(product);
+    }
+    public IActionResult Menu()
+    {
+        var products = _service.GetProducts()
+                               .Where(p => p.IsPublished)
+                               .ToList();
+
+        return View(products);
     }
 }

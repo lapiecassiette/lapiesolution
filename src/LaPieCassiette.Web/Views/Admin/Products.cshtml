@@ -1,0 +1,68 @@
+﻿@using LaPieCassiette.Application;
+@using LaPieCassiette.Domain.Models;
+@model List<Product>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Produits</h1>
+        <a href="/Admin/Create" class="button">+ Ajouter</a>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                    <th>Statut</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.Name</td>
+
+                        <td class="price">@p.Price €</td>
+
+                        <td>
+                            <span class="status @(p.IsPublished ? "published" : "draft")">
+                                @(p.IsPublished ? "Publié" : "Brouillon")
+                            </span>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(p.ImagePath))
+                            {
+                                <img src="@p.ImagePath" style="width:80px; height:auto;" />
+                            }
+                        </td>
+                        <td class="actions">
+
+                            <a href="/Admin/Edit?id=@p.Id">Modifier</a>
+
+                            <form method="post" action="/Admin/Delete" style="display:inline;">
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <button onclick="return confirm('Supprimer ?')">Supprimer</button>
+                            </form>
+
+                            <a href="/Admin/TogglePublish?id=@p.Id">
+                                @(p.IsPublished ? "Dépublier" : "Publier")
+                            </a>
+
+                        </td>
+                        <td>
+                            <span class="status @(p.IsPublished ? "published" : "draft")">
+                                @(p.IsPublished ? "Publié" : "Brouillon")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
