@@ -8,16 +8,17 @@
         <h1>Produits</h1>
         <a href="/Admin/Create" class="button">+ Ajouter</a>
     </div>
-
+    <input type="text" id="searchInput" placeholder="Rechercher un produit..." />
     <div class="table-card">
         <table>
             <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Catégorie</th>
                     <th>Prix</th>
-                    <th>Actions</th>
-                    <th>Statut</th>
                     <th>Image</th>
+                  
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -27,19 +28,21 @@
                     <tr>
                         <td>@p.Name</td>
 
+                        <td>
+                            <span class="category">@p.Category</span>
+                        </td>
+
                         <td class="price">@p.Price €</td>
 
                         <td>
-                            <span class="status @(p.IsPublished ? "published" : "draft")">
-                                @(p.IsPublished ? "Publié" : "Brouillon")
-                            </span>
-                        </td>
-                        <td>
                             @if (!string.IsNullOrEmpty(p.ImagePath))
                             {
-                                <img src="@p.ImagePath" style="width:80px; height:auto;" />
+                                <img src="@p.ImagePath" style="width:80px;" />
                             }
                         </td>
+
+                     
+
                         <td class="actions">
 
                             <a href="/Admin/Edit?id=@p.Id">Modifier</a>
@@ -49,20 +52,35 @@
                                 <button onclick="return confirm('Supprimer ?')">Supprimer</button>
                             </form>
 
-                            <a href="/Admin/TogglePublish?id=@p.Id">
-                                @(p.IsPublished ? "Dépublier" : "Publier")
-                            </a>
+                            <form method="post" action="/Admin/TogglePublish" style="display:inline;">
+                                <input type="hidden" name="id" value="@p.Id" />
 
-                        </td>
-                        <td>
-                            <span class="status @(p.IsPublished ? "published" : "draft")">
-                                @(p.IsPublished ? "Publié" : "Brouillon")
-                            </span>
+                                <label class="switch">
+                                    <input type="checkbox"
+                                           onchange="this.form.submit()"
+                                           @(p.IsPublished ? "checked" : "") />
+                                    <span class="slider"></span>
+                                </label>
+                            </form>
+
                         </td>
                     </tr>
                 }
             </tbody>
+
+                  
         </table>
     </div>
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            const value = this.value.toLowerCase();
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(value) ? "" : "none";
+            });
+        });
+    </script>
 
 </div>

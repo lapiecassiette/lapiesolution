@@ -17,11 +17,12 @@ public class Product
     }
     public bool IsPublished { get; private set; }
 
-    public Product(string name, string description, decimal price)
+    public Product(string name, string description, decimal price, string category)
     {
         Name = name;
         Description = description;
         Price = price;
+        Category = category;
         IsPublished = false;
     }
 
@@ -38,6 +39,13 @@ public class Product
         Name = name;
         Description = description;
         Price = price;
+    }
+    public void Update(string name, string description, decimal price, string category)
+    {
+        Name = name;
+        Description = description;
+        Price = price;
+        Category = category;
     }
 
     public void Publish() => IsPublished = true;

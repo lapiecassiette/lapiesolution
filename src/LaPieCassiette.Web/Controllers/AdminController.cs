@@ -13,11 +13,7 @@ public class AdminController : Controller
         _service = service;
     }
 
-    public IActionResult Products()
-    {
-        var products = _service.GetProducts();
-        return View(products);
-    }
+ 
 
     public IActionResult Create()
     {
@@ -27,6 +23,8 @@ public class AdminController : Controller
     [HttpPost]
     public IActionResult Create(ProductDto dto, IFormFile? image)
     {
+        Console.WriteLine("CATEGORY DTO = " + dto.Category);
+
         Stream? stream = null;
         string? fileName = null;
 
@@ -48,26 +46,45 @@ public class AdminController : Controller
         {
             Name = product.Name,
             Description = product.Description,
-            Price = product.Price
+            Price = product.Price,
+            Category = product.Category,
+            ImagePath = product.ImagePath
         };
 
         return View(dto);
     }
-
     [HttpPost]
     public IActionResult Edit(int id, ProductDto dto)
     {
         _service.Update(id, dto);
         return RedirectToAction("Products");
     }
+    [HttpPost]
     public IActionResult Delete(int id)
     {
         _service.Delete(id);
         return RedirectToAction("Products");
     }
+    [HttpPost]
     public IActionResult TogglePublish(int id)
     {
         _service.TogglePublish(id);
         return RedirectToAction("Products");
+    }
+    public IActionResult Products(int page = 1)
+    {
+        int pageSize = 10;
+
+        var products = _service.GetProducts();
+
+        var paged = products
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(products.Count / (double)pageSize);
+
+        return View(paged);
     }
 }

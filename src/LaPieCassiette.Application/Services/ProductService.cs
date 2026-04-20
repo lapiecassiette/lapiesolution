@@ -24,7 +24,7 @@ public class ProductService : IProductService
 
     public void Create(ProductDto dto, Stream? imageStream, string? fileName)
     {
-        var product = new Product(dto.Name, dto.Description, dto.Price);
+        var product = new Product(dto.Name, dto.Description, dto.Price, dto.Category);
 
         if (imageStream != null && !string.IsNullOrEmpty(fileName))
         {
@@ -46,8 +46,6 @@ public class ProductService : IProductService
             }
 
             product.SetImage("/images/" + newFileName);
-            product.SetCategory(dto.Category);
-            product.Publish();
         }
 
         _repository.Add(product);
@@ -60,8 +58,7 @@ public class ProductService : IProductService
         if (product == null)
             throw new Exception("Product not found");
 
-        // à améliorer plus tard (méthode dans Domain)
-        product = new Product(dto.Name, dto.Description, dto.Price);
+        product.Update(dto.Name, dto.Description, dto.Price, dto.Category);
 
         _repository.Update(product);
     }

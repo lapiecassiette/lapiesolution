@@ -1,7 +1,22 @@
 ﻿@using LaPieCassiette.Application.DTOs;
 @using LaPieCassiette.Domain.Models;
 @model ProductDto;
+<script>
+    document.getElementById("categoryFilter").addEventListener("change", function () {
+        const value = this.value;
+        const rows = document.querySelectorAll("tbody tr");
 
+        rows.forEach(row => {
+            const category = row.querySelector(".category").innerText;
+
+            if (value === "all" || category === value) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 <h1>Créer un produit</h1>
 
 <form method="post" enctype="multipart/form-data">
@@ -12,11 +27,12 @@
     </div>
     <div>
         <label>Catégorie</label>
-        <select asp-for="Category">
-            <option>Entrées</option>
-            <option>Plats</option>
-            <option>Desserts</option>
-            <option>Boissons</option>
+        <select id="categoryFilter">
+            <option value="all">Toutes</option>
+            <option value="Entrées">Entrées</option>
+            <option value="Plats">Plats</option>
+            <option value="Desserts">Desserts</option>
+            <option value="Boissons">Boissons</option>
         </select>
     </div>
     <div>

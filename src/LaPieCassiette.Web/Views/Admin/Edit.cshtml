@@ -4,8 +4,7 @@
 
 <h1>Modifier un produit</h1>
 
-<form method="post">
-    <input type="hidden" name="id" value="@Context.Request.Query["id"]" />
+<form method="post" enctype="multipart/form-data">
 
     <div>
         <label>Nom</label>
@@ -22,5 +21,29 @@
         <input asp-for="Price" />
     </div>
 
+    <div>
+        <label>Catégorie</label>
+        <select asp-for="Category">
+            <option>Entrées</option>
+            <option>Plats</option>
+            <option>Desserts</option>
+            <option>Boissons</option>
+        </select>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div>
+            <label>Image actuelle</label><br />
+            <img src="@Model.ImagePath" style="width:120px; border-radius:8px;" />
+        </div>
+    }
+
+    <div>
+        <label>Changer l'image</label>
+        <input type="file" name="image" />
+    </div>
+
     <button type="submit">Modifier</button>
+
 </form>
