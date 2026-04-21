@@ -1,34 +1,150 @@
 ﻿@using LaPieCassiette.Application;
 @using LaPieCassiette.Domain.Models;
-@model List<Product>
+@model List<LaPieCassiette.Domain.Models.Product>
 
-<div class="container">
+<div class="container mt-4">
 
-    <h1>La Carte</h1>
+    <h2 class="mb-4">🍽️ La Carte</h2>
 
-    @foreach (var group in Model.GroupBy(p => p.Category))
-    {
-        <h2 class="category-title">@group.Key</h2>
+    <div class="row g-4">
 
-        <div class="grid">
-            @foreach (var p in group)
-            {
-                <div class="card">
+@foreach (var p in Model)
+{
+            <div class="col-md-4">
+
+                <div class="card h-100 shadow-sm selectable"
+                     data-id="@p.Id"
+                     data-name="@p.Name">
 
                     @if (!string.IsNullOrEmpty(p.ImagePath))
                     {
-                        <img src="@p.ImagePath" />
+                        <img src="@p.ImagePath" class="card-img-top" style="height:200px; object-fit:cover;" />
                     }
 
-                    <div class="content">
-                        <h3>@p.Name</h3>
-                        <p>@p.Description</p>
-                        <span class="price">@p.Price €</span>
+                    <div class="card-body">
+
+                        <h5 class="card-title">@p.Name</h5>
+
+                        <p class="card-text">@p.Description</p>
+
+                        <div class="mb-2">
+                            @foreach (var tag in p.ProductTags.Select(pt => pt.Tag))
+                            {
+                                <span class="badge bg-dark me-1">@tag.Name</span>
+                            }
+                        </div>
+
                     </div>
 
                 </div>
-            }
-        </div>
-    }
 
-</div>
+            </div>
+}
+        <div class="mt-5 text-center">
+
+            <h4>🥣 Mon assiette (<span id="count">0</span>/4)</h4>
+
+            <div id="plate" class="plate-visual">
+
+                <!-- centre -->
+                <div class="plate-center">
+                    <span>+ ajoute tes pioches</span>
+                </div>
+
+            </div>
+
+            <button class="btn btn-dark w-100 mt-3" onclick="submitPlate()">
+                Valider mon assiette
+            </button>
+
+        </div>
+    </div>
+@section Scripts {
+        <script>
+
+            let plate = [];
+
+            document.querySelectorAll('.selectable').forEach(card => {
+
+                card.addEventListener('click', () => {
+
+                    const id = card.dataset.id;
+                    const name = card.dataset.name;
+
+                    // 🔒 limite 4
+                    if (!plate.includes(id) && plate.length >= 4) {
+                        alert("Maximum 4 pioches");
+                        return;
+                    }
+
+                    card.classList.toggle('selected');
+
+                    if (plate.includes(id)) {
+                        plate = plate.filter(x => x !== id);
+                        removeFromPlate(id);
+                    } else {
+                        plate.push(id);
+                        addToPlate(id, name);
+                    }
+
+                    updateCount();
+                });
+
+            });
+
+                                 function renderPlate() {
+
+                const zone = document.getElementById('plate');
+                zone.innerHTML = "";
+
+                const radius = 110; // distance du centre
+                const centerX = 150;
+                const centerY = 150;
+
+                plate.forEach((id, index) => {
+
+                    const angle = (index / plate.length) * (2 * Math.PI);
+
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+
+                    const div = document.createElement("div");
+                    div.className = "plate-item";
+                    div.id = "plate-" + id;
+
+                    // 🔥 récup nom depuis DOM
+                    const card = document.querySelector(`[data-id='${id}']`);
+                    const name = card ? card.dataset.name : "Item";
+
+                    div.textContent = name;
+
+                    div.style.left = x + "px";
+                    div.style.top = y + "px";
+
+                    // 🔥 click pour supprimer
+                    div.addEventListener("click", () => removeItem(id));
+
+                    zone.appendChild(div);
+                });
+            }
+                      function removeFromPlate(id) {
+                const el = document.getElementById("plate-" + id);
+                if (el) el.remove();
+            }
+
+            function updateCount() {
+                document.getElementById("count").textContent = plate.length;
+            }
+
+            function submitPlate() {
+
+                fetch('/Order/Validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(plate)
+                })
+                .then(() => alert("Commande envoyée"));
+            }
+
+        </script>
+}

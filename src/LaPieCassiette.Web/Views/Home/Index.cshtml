@@ -1,6 +1,6 @@
 ﻿@using LaPieCassiette.Application;
 @using LaPieCassiette.Domain.Models;
-@model List<Product>
+@model List<LaPieCassiette.Domain.Models.Product>;
 
 <div class="section">
 
@@ -11,12 +11,28 @@
     street-food revisitée.
 </p>
 </div>
-<div class="hero">
+<div style="text-align:center">
     
-    
-    <div class="hero-content">
-       
-    </div>
+    <img src="~/images/Hero.png" />
    
 </div>
+<h2>Nos pioches</h2>
 
+<div class="d-flex flex-wrap gap-3">
+
+    @foreach (var p in Model)
+    {
+        <div style="width:220px; border:1px solid #ddd; padding:10px;">
+
+            @if (!string.IsNullOrEmpty(p.ImagePath))
+            {
+                <img src="@p.ImagePath" style="width:100%;" />
+            }
+
+            <h4>@p.Name</h4>
+            <p>@p.Description</p>
+
+        </div>
+    }
+
+</div>

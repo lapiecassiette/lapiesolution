@@ -1,49 +1,144 @@
 ﻿@using LaPieCassiette.Application.DTOs;
 @using LaPieCassiette.Domain.Models;
-@model ProductDto
+@model LaPieCassiette.Application.DTOs.ProductDto
 
-<h1>Modifier un produit</h1>
 
-<form method="post" enctype="multipart/form-data">
+<div class="container mt-5">
+    <div class="row g-4">
 
-    <div>
-        <label>Nom</label>
-        <input asp-for="Name" />
-    </div>
+        <!-- 🧾 PRODUIT -->
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
 
-    <div>
-        <label>Description</label>
-        <input asp-for="Description" />
-    </div>
+                <h4 class="mb-3">Produit</h4>
 
-    <div>
-        <label>Prix</label>
-        <input asp-for="Price" />
-    </div>
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
 
-    <div>
-        <label>Catégorie</label>
-        <select asp-for="Category">
-            <option>Entrées</option>
-            <option>Plats</option>
-            <option>Desserts</option>
-            <option>Boissons</option>
-        </select>
-    </div>
+                    <input type="hidden" asp-for="Id" />
 
-    @if (!string.IsNullOrEmpty(Model.ImagePath))
-    {
-        <div>
-            <label>Image actuelle</label><br />
-            <img src="@Model.ImagePath" style="width:120px; border-radius:8px;" />
+                    <!-- IMAGE -->
+                    @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+                    {
+                        <div class="text-center mb-3">
+                            <img src="@Model.ExistingImagePath" style="width:120px;" />
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <input type="file" name="image" class="form-control" />
+                    </div>
+
+                    <!-- NOM -->
+                    <div class="mb-3">
+                        <input asp-for="Name" class="form-control" placeholder="Nom" />
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="mb-3">
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                    </div>
+
+                    <!-- PUBLISH -->
+                    <div class="form-check form-switch mb-3">
+                        <input asp-for="IsPublished" class="form-check-input" />
+                        <label class="form-check-label">Publié</label>
+                    </div>
+
+                    <!-- 🔥 TAGS (DANS LE FORM) -->
+                    <div class="mb-3">
+                        <label>Tags</label>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            @foreach (var tag in (ViewBag.Tags as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>())
+                            {
+                                var tagId = int.Parse(tag.Value);
+                                var isChecked = Model.TagIds.Contains(tagId);
+
+                                <label class="tag-item">
+
+                                    <input type="checkbox"
+                                           name="TagIds"
+                                           value="@tag.Value"
+                                           @(isChecked ? "checked" : "") />
+
+                                    <span>@tag.Text</span>
+
+                                </label>
+                            }
+
+                        </div>
+                    </div>
+
+                    <!-- BOUTON -->
+                    <button type="submit" class="btn btn-dark w-100">
+                        💾 Sauvegarder produit
+                    </button>
+
+                </form>
+
+                <!-- RETOUR -->
+                <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-3">
+                    ← Retour à la liste
+                </a>
+
+                <hr />
+
+               
+
+                <!-- CREATE TAG -->
+                <form asp-controller="Tag" asp-action="Create" method="post">
+                    <div class="input-group">
+                        <input type="text" name="name" class="form-control" placeholder="Nouveau tag" />
+                        <button class="btn btn-dark">+</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
+
+    </div>
+</div>
+
+<style>
+    .tag-item {
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        cursor: pointer;
     }
 
-    <div>
-        <label>Changer l'image</label>
-        <input type="file" name="image" />
-    </div>
+        .tag-item input {
+            display: none;
+        }
 
-    <button type="submit">Modifier</button>
+        .tag-item.selected {
+            background: black;
+            color: white;
+        }
+</style>
+@* @section Scripts {
+    <script>
+               document.addEventListener("DOMContentLoaded", function () {
 
-</form>
+            const items = document.querySelectorAll('.tag-item');
+
+            if (!items.length) return;
+
+            items.forEach(item => {
+                const checkbox = item.querySelector('input');
+
+                if (!checkbox) return;
+
+                item.addEventListener('click', function (e) {
+                    if (e.target.tagName !== "INPUT") {
+                        checkbox.checked = !checkbox.checked;
+                    }
+
+                    item.classList.toggle('selected', checkbox.checked);
+                });
+            });
+
+        });
+    </script>
+} *@

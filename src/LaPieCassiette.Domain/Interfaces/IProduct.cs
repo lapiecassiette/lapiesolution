@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using LaPieCassiette.Domain.Models; 
+using LaPieCassiette.Domain.Models;
 public interface IProductRepository
 {
-    List<Product> GetAll();
-    Product GetById(int id);
-    void Add(Product product);
-    void Update(Product product);
-    void Delete(int id);
-    //IEnumerable<Product> GetAllProduct();
+    Task<List<Product>> GetAllAsync();
+    Task<List<Product>> GetPublishedAsync();
+
+    Task<Product?> GetByIdAsync(int id);
+
+    Task AddAsync(Product product);
+    Task UpdateAsync(Product product);
+
+    Task DeleteAsync(int id);
+    Task<List<Product>> GetAvailableAsync();
 }

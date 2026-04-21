@@ -8,14 +8,8 @@ public class DashboardController : Controller
 {
     private readonly IProductService _service;
 
-    public IActionResult Dashboard()
+    public IActionResult Index()
     {
-        var products = _service.GetProducts();
-
-        ViewBag.Total = products.Count;
-        ViewBag.Published = products.Count(p => p.IsPublished);
-        ViewBag.Draft = products.Count(p => !p.IsPublished);
-
         return View();
     }
 }

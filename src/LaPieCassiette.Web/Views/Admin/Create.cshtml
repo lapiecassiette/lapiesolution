@@ -1,6 +1,6 @@
 ﻿@using LaPieCassiette.Application.DTOs;
 @using LaPieCassiette.Domain.Models;
-@model ProductDto;
+@model LaPieCassiette.Application.DTOs.ProductDto
 <script>
     document.getElementById("categoryFilter").addEventListener("change", function () {
         const value = this.value;
@@ -17,39 +17,44 @@
         });
     });
 </script>
-<h1>Créer un produit</h1>
+<h2>Créer une pioche</h2>
 
-<form method="post" enctype="multipart/form-data">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
 
     <div>
         <label>Nom</label>
-        <input asp-for="Name" />
+        <input asp-for="Name" class="form-control" />
     </div>
-    <div>
-        <label>Catégorie</label>
-        <select id="categoryFilter">
-            <option value="all">Toutes</option>
-            <option value="Entrées">Entrées</option>
-            <option value="Plats">Plats</option>
-            <option value="Desserts">Desserts</option>
-            <option value="Boissons">Boissons</option>
-        </select>
-    </div>
-    <div>
+
+    <div class="mt-2">
         <label>Description</label>
-        <input asp-for="Description" />
+        <textarea asp-for="Description" class="form-control"></textarea>
     </div>
 
-    <div>
-        <label>Prix</label>
-        <input asp-for="Price" />
-    </div>
-
-    <div>
+    <div class="mt-2">
         <label>Image</label>
-        <input type="file" name="image" />
+        <input type="file" name="image" class="form-control" />
     </div>
+    <div class="mb-3">
+        <label>Tags</label>
 
-    <button type="submit">Créer</button>
+        <div class="d-flex flex-wrap gap-2">
 
+            @foreach (var tag in (ViewBag.Tags as IEnumerable<SelectListItem>) ?? Enumerable.Empty<SelectListItem>())
+            {
+                <label class="tag-item">
+
+                    <input type="checkbox"
+                           name="TagIds"
+                           value="@tag.Value"
+                           class="tag-checkbox" />
+
+                    <span>@tag.Text</span>
+
+                </label>
+            }
+
+        </div>
+    </div>
+    <button class="btn btn-success mt-3">Créer</button>
 </form>

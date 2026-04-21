@@ -1,90 +1,131 @@
-﻿using System;
-using LaPieCassiette.Application.DTOs;
-using LaPieCassiette.Domain.Models;
+﻿using LaPieCassiette.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using    Microsoft.AspNetCore.Http.Abstractions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 public class AdminController : Controller
 {
-    private readonly IProductService _service;
+    private readonly IProductService _productService;
+    private readonly ITagRepository _tagRepository;
+    private readonly IProductRepository _productRepository;
 
-    public AdminController(IProductService service)
+    public AdminController(
+     IProductService productService,
+     ITagRepository tagRepository,
+     IProductRepository productRepository)
     {
-        _service = service;
+        _productService = productService;
+        _tagRepository = tagRepository;
+        _productRepository = productRepository;
+    }
+    // LISTE
+    public async Task<IActionResult> Index()
+    {
+        var products = await _productService.GetAllAsync();
+        return View(products);
     }
 
- 
-
-    public IActionResult Create()
+    // CREATE GET
+    public async Task<IActionResult> Create()
     {
-        return View();
+        ViewBag.Tags = new SelectList(
+            await _tagRepository.GetAllAsync(),
+            "Id",
+            "Name"
+        );
+
+        return View(new ProductDto());
     }
 
+    // CREATE POST
     [HttpPost]
-    public IActionResult Create(ProductDto dto, IFormFile? image)
+    public async Task<IActionResult> Create(ProductDto dto, IFormFile? image)
     {
-        Console.WriteLine("CATEGORY DTO = " + dto.Category);
+        Console.WriteLine("TAG COUNT = " + dto.TagIds.Count); // 👈 ICI
 
-        Stream? stream = null;
-        string? fileName = null;
-
-        if (image != null)
+        if (!ModelState.IsValid)
         {
-            stream = image.OpenReadStream();
-            fileName = image.FileName;
+            ViewBag.Tags = new SelectList(
+                await _tagRepository.GetAllAsync(),
+                "Id",
+                "Name"
+            );
+
+            return View(dto);
         }
 
-        _service.Create(dto, stream, fileName);
+        await _productService.CreateAsync(
+            dto,
+            image?.OpenReadStream(),
+            image?.FileName
+        );
 
-        return RedirectToAction("Products");
+        return RedirectToAction(nameof(Index));
     }
-    public IActionResult Edit(int id)
+    // EDIT GET
+    public async Task<IActionResult> Edit(int id)
     {
-        var product = _service.GetById(id);
+        var product = await _productService.GetByIdAsync(id);
+
+        if (product == null)
+            return NotFound();
 
         var dto = new ProductDto
         {
+            Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Price = product.Price,
-            Category = product.Category,
-            ImagePath = product.ImagePath
+            IsPublished = product.IsPublished,
+
+            // 🔥 IMPORTANT
+            TagIds = product.ProductTags
+                .Select(pt => pt.TagId)
+                .ToList(),
+
+            ExistingImagePath = product.ImagePath
         };
+
+        ViewBag.Tags = new SelectList(
+            await _tagRepository.GetAllAsync(),
+            "Id",
+            "Name"
+        );
 
         return View(dto);
     }
+    // EDIT POST
     [HttpPost]
-    public IActionResult Edit(int id, ProductDto dto)
+    public async Task<IActionResult> Edit(ProductDto dto, IFormFile? image)
     {
-        _service.Update(id, dto);
-        return RedirectToAction("Products");
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Tags = new SelectList(
+                await _tagRepository.GetAllAsync(),
+                "Id",
+                "Name"
+            );
+
+            return View(dto);
+        }
+
+        await _productService.UpdateAsync(
+            dto.Id, // 🔥 IMPORTANT
+            dto,
+            image?.OpenReadStream(),
+            image?.FileName
+        );
+        Console.WriteLine("TAG COUNT UPDATE: " + dto.TagIds.Count);
+        return RedirectToAction(nameof(Index));
     }
-    [HttpPost]
-    public IActionResult Delete(int id)
+    // DELETE
+    public async Task<IActionResult> Delete(int id)
     {
-        _service.Delete(id);
-        return RedirectToAction("Products");
+        await _productService.DeleteAsync(id);
+        return RedirectToAction(nameof(Index));
     }
-    [HttpPost]
-    public IActionResult TogglePublish(int id)
+
+    // PUBLISH
+    public async Task<IActionResult> TogglePublish(int id)
     {
-        _service.TogglePublish(id);
-        return RedirectToAction("Products");
-    }
-    public IActionResult Products(int page = 1)
-    {
-        int pageSize = 10;
-
-        var products = _service.GetProducts();
-
-        var paged = products
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        ViewBag.CurrentPage = page;
-        ViewBag.TotalPages = (int)Math.Ceiling(products.Count / (double)pageSize);
-
-        return View(paged);
+        await _productService.TogglePublishAsync(id);
+        return RedirectToAction(nameof(Index));
     }
 }

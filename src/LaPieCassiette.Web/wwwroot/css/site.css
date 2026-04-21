@@ -3,7 +3,26 @@ body {
     background: #ffffff;
     margin: 0;
 }
+html, body {
+    height: 100%;
+    margin: 0;
+}
 
+/* body devient flex */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* contenu prend toute la place */
+.content {
+    flex: 1;
+}
+
+/* footer normal (pas fixed !) */
+footer {
+    background: #f8f9fa;
+}
 /* CONTENEUR */
 .container {
     max-width: 1100px;
@@ -119,6 +138,9 @@ tr:not(:last-child) {
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     transition: transform 0.2s ease;
 }
+.badge {
+    font-size: 0.75rem;
+}
 
     .card:hover {
         transform: translateY(-5px);
@@ -144,13 +166,60 @@ tr:not(:last-child) {
 }
 /* HERO */
 .hero {
-    height: 300px;
-    background: url('/images/hero.png') center no-repeat;
+   
+
+    background: url('/images/Hero.png') center no-repeat;
     background-size: cover;
     align-items: center;
     justify-content: center;
-    MAX-width: 70%;
+    
 }
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    font-size: 14px;
+}
+.card {
+    transition: 0.2s;
+}
+
+    .card:hover {
+        transform: scale(1.02);
+    }
+.tag-item {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 4px;
+}
+
+    /* cache le checkbox */
+    .tag-item input {
+        display: none;
+    }
+
+        /* ?? quand coché ? style */
+        .tag-item input:checked + span {
+            background: black;
+            color: white;
+            border-radius: 20px;
+            padding: 6px 12px;
+        }
+    .tag-item input {
+        display: none;
+    }
+
+        .tag-item input:checked + span {
+            background: black;
+            color: white;
+            border-radius: 20px;
+            padding: 6px 12px;
+        }
 /*
     .hero::after {
         content: "";
@@ -159,13 +228,9 @@ tr:not(:last-child) {
         background: transparent;
     }*/
 
-.hero-content {
-    position: relative;
-    color: transparent;
-    text-align: center;
-}
 
-.hero h1 {
+
+/*.hero h1 {
     font-size: 48px;
     margin-bottom: 10px;
 }
@@ -174,7 +239,7 @@ tr:not(:last-child) {
     font-size: 18px;
     margin-bottom: 20px;
 }
-
+*/
 /* CTA */
 .cta {
     background: white;
@@ -203,8 +268,15 @@ tr:not(:last-child) {
     backdrop-filter: blur(10px);
     z-index: 1000;
     border-bottom: 1px solid #eee;
+    padding: 12px 0;
+}
+.navbar-brand {
+    font-weight: bold;
 }
 
+.nav-link {
+    font-size: 0.95rem;
+}
 .nav-container {
     max-width: 1100px;
     margin: auto;
@@ -292,3 +364,67 @@ input:checked + .slider {
     input:checked + .slider:before {
         transform: translateX(18px);
     }
+input[type="checkbox"] {
+    display: none;
+}
+
+    input[type="checkbox"]:checked + h5 {
+        color: green;
+    }
+.selectable {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .selectable:hover {
+        transform: scale(1.02);
+    }
+
+    .selectable.selected {
+        border: 2px solid black;
+        background: #f8f9fa;
+    }
+
+.plate-zone {
+    min-height: 150px;
+    border: 2px dashed #ccc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+    .plate-zone div {
+        padding: 6px;
+        border-bottom: 1px solid #eee;
+    }
+.plate-visual {
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #fff 60%, #eee 100%);
+    border: 6px solid #ddd;
+    position: relative;
+}
+
+/* élément dans l’assiette */
+.plate-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #333;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    animation: pop 0.2s ease;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.7) translate(-50%, -50%);
+    }
+
+    to {
+        transform: scale(1) translate(-50%, -50%);
+    }
+}

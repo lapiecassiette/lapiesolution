@@ -7,36 +7,23 @@ namespace LaPieCassiette.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IProductService _service;
+ 
 
-    public HomeController(IProductService service)
+    private readonly IProductService _productService;
+
+    public HomeController(IProductService productService)
     {
-        _service = service;
+        _productService = productService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var products = _service.GetProducts()
-                               .Where(p => p.IsPublished)
-                               .ToList();
-
+        var products = await _productService.GetProductsAsync();
         return View(products);
     }
-    public IActionResult Detail(int id)
+    public async Task<IActionResult> Menu()
     {
-        var product = _service.GetById(id);
-
-        if (product == null)
-            return NotFound();
-
-        return View(product);
-    }
-    public IActionResult Menu()
-    {
-        var products = _service.GetProducts()
-                               .Where(p => p.IsPublished)
-                               .ToList();
-
+        var products = await _productService.GetProductsAsync();
         return View(products);
     }
 }

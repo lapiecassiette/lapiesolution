@@ -1,7 +1,9 @@
-﻿using System;
-
+﻿using LaPieCassiette.Domain.Models;
 using LaPieCassiette.Infrastructure.Data;
-using LaPieCassiette.Domain.Models;
+
+using Microsoft.EntityFrameworkCore;
+
+using System;
 public class ProductRepository : IProductRepository
 {
     private readonly AppDbContext _context;
@@ -11,35 +13,59 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public List<Product> GetAll()
+    public async Task<List<Product>> GetAllAsync()
     {
-        return _context.Products.ToList();
+        return await _context.Products
+            .Include(p => p.ProductTags)
+            .ThenInclude(pt => pt.Tag)
+            .ToListAsync();
     }
 
-    public Product GetById(int id)
+    public async Task<List<Product>> GetPublishedAsync()
     {
-        return _context.Products.FirstOrDefault(p => p.Id == id);
+        return await _context.Products
+            .Where(p => p.IsPublished)
+            .Include(p => p.ProductTags)
+            .ThenInclude(pt => pt.Tag)
+            .ToListAsync();
     }
 
-    public void Add(Product product)
+    public async Task<Product?> GetByIdAsync(int id)
     {
-        _context.Products.Add(product);
-        _context.SaveChanges();
+        return await _context.Products
+            .Include(p => p.ProductTags)
+            .ThenInclude(pt => pt.Tag)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public void Update(Product product)
+    public async Task AddAsync(Product product)
+    {
+        await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(Product product)
     {
         _context.Products.Update(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void Delete(int id)
+    public async Task DeleteAsync(int id)
     {
-        var product = GetById(id);
+        var product = await _context.Products.FindAsync(id);
         if (product != null)
         {
             _context.Products.Remove(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<List<Product>> GetAvailableAsync()
+    {
+        return await _context.Products
+            .Where(p => p.IsPublished)
+            .Include(p => p.ProductTags)
+            .ThenInclude(pt => pt.Tag)
+            .ToListAsync();
     }
 }

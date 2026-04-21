@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using LaPieCassiette.Infrastructure.Data;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LaPieCassietteDb;Trusted_Connection=True;"));
@@ -9,6 +10,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
