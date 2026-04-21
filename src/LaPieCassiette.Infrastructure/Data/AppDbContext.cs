@@ -10,6 +10,11 @@ public class AppDbContext : DbContext
     public DbSet<ProductTag> ProductTags => Set<ProductTag>();
 
     public DbSet<Formula> Formulas => Set<Formula>();
+    
+    public DbSet<Purchase> Purchases { get; set; }
+
+
+    public DbSet<User> Users { get; set; }
 
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
@@ -100,5 +105,10 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(oi => oi.ProductId);
         });
+        modelBuilder.Entity<Purchase>()
+        .HasOne(p => p.Supplier)
+        .WithMany()
+        .HasForeignKey(p => p.SupplierId)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

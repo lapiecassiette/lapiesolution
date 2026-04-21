@@ -1,6 +1,6 @@
 body {
     font-family: 'Inter', sans-serif;
-    background: #ffffff;
+  
     margin: 0;
 }
 html, body {
@@ -396,29 +396,198 @@ input[type="checkbox"] {
         padding: 6px;
         border-bottom: 1px solid #eee;
     }
-.plate-visual {
-    width: 300px;
-    height: 300px;
-    margin: 20px auto;
-    border-radius: 50%;
-    background: radial-gradient(circle at center, #fff 60%, #eee 100%);
-    border: 6px solid #ddd;
-    position: relative;
-}
+
 
 /* élément dans l’assiette */
 .plate-item {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    background: #333;
+    background: black;
     color: white;
     padding: 6px 10px;
     border-radius: 20px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    animation: pop 0.2s ease;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.placemat {
+    width: 100%;
+    max-width: 420px;
+    min-height: 260px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 12px;
+    background-image: url('/images/set.jpg');
+    background-size: 300px;
+    background-position: center;
+    background-repeat: repeat;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+.placeholder {
+    color: #999;
+    font-size: 0.9rem;
+}
+.menu-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    transition: 0.2s;
+    height: 100%;
 }
 
+    .menu-item:hover {
+        transform: translateY(-2px);
+    }
+
+.menu-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.menu-body {
+    padding: 15px;
+}
+
+.menu-title {
+    margin-bottom: 6px;
+}
+
+.menu-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tag {
+    background: #f1f1f1;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+}
+
+.menu-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+/* ?? ARDOISE */
+.board {
+    background: #2e2e2e;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    background-image: url('/images/Ardoise.png'); /* ou texture */
+    background-size: cover;
+    background-position: center;
+}
+
+.board-date {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-transform: capitalize;
+}
+
+.board-title {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive; /* temporaire */
+    letter-spacing: 1px;
+}
+
+/* ??? FLOW (PAS GRILLE) */
+.menu-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* ?? CARTE */
+.menu-card {
+    width: 260px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+    .menu-card:hover {
+        transform: translateY(-3px) rotate(-0.5deg);
+    }
+
+    .menu-card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+    }
+
+.menu-content {
+    padding: 12px;
+}
+
+    .menu-content h5 {
+        margin-bottom: 5px;
+    }
+    .menu-content p {
+        color: #555;
+    }
+
+    .menu-content h5 {
+        color: #222;
+    }
+/* TAGS */
+.menu-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 6px;
+}
+
+.tag {
+    background: #f1f1f1;
+    padding: 3px 6px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+}
+.menudujour-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: -1;
+}
+.menu-content p {
+    font-size: 0.85rem;
+    color: #666;
+}
+.menu-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(3px);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.menudujour-page {
+    background-image: url('/images/Ardoise.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+    .menudujour-page .container {
+        background: transparent !important;
+    }
+    .menudujour-page main.container {
+        background: transparent !important;
+    }
+
+    .menudujour-page .content {
+        background: transparent !important;
+    }
 @keyframes pop {
     from {
         transform: scale(0.7) translate(-50%, -50%);

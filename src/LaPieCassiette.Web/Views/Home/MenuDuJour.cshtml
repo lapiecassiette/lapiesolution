@@ -1,0 +1,56 @@
+﻿@using LaPieCassiette.Application;
+@using LaPieCassiette.Domain.Models;
+@model List<LaPieCassiette.Domain.Models.Product>
+
+@{
+    Layout = "_Layout";
+}
+@section BodyClass {
+        menudujour-page
+}
+<div class="container mt-5 board">
+
+    <!-- 🪧 ARDOISE -->
+    <div class="text-center mb-5">
+
+        <div class="board-date">
+            @DateTime.Now.ToString("dddd dd MMMM")
+        </div>
+
+        <h2 class="board-title">Menu du jour</h2>
+
+    </div>
+
+    <!-- 🍽️ VIGNETTES LIBRES -->
+    <div class="menu-flow">
+
+        @foreach (var p in Model)
+        {
+            <div class="menu-card">
+
+                @if (!string.IsNullOrEmpty(p.ImagePath))
+                {
+                    <img src="@p.ImagePath" />
+                }
+
+                <div class="menu-content">
+
+                    <h5>@p.Name</h5>
+
+                    <div class="menu-tags">
+                        @foreach (var tag in p.ProductTags.Select(pt => pt.Tag))
+                        {
+                            <span class="tag">@tag.Name</span>
+                        }
+                    </div>
+
+                    <p>@p.Description</p>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

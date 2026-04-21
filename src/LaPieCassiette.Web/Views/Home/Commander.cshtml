@@ -44,19 +44,14 @@
 
             <h4>🥣 Mon assiette (<span id="count">0</span>/4)</h4>
 
-            <div id="plate" class="plate-visual">
-
-                <!-- centre -->
-                <div class="plate-center">
-                    <span>+ ajoute tes pioches</span>
-                </div>
-
+            <div id="plate" class="placemat">
+                <p class="placeholder">Clique pour composer</p>
             </div>
 
             <button class="btn btn-dark w-100 mt-3" onclick="submitPlate()">
-                Valider mon assiette
+                Valider ma cassiette
             </button>
-
+        </div>
         </div>
     </div>
 @section Scripts {
@@ -69,7 +64,6 @@
                 card.addEventListener('click', () => {
 
                     const id = card.dataset.id;
-                    const name = card.dataset.name;
 
                     // 🔒 limite 4
                     if (!plate.includes(id) && plate.length >= 4) {
@@ -81,55 +75,52 @@
 
                     if (plate.includes(id)) {
                         plate = plate.filter(x => x !== id);
-                        removeFromPlate(id);
                     } else {
                         plate.push(id);
-                        addToPlate(id, name);
                     }
 
+                    renderPlate();   // 🔥 clé
                     updateCount();
                 });
 
             });
 
-                                 function renderPlate() {
+                    function renderPlate() {
 
                 const zone = document.getElementById('plate');
                 zone.innerHTML = "";
 
-                const radius = 110; // distance du centre
-                const centerX = 150;
-                const centerY = 150;
+                if (plate.length === 0) {
+                    zone.innerHTML = "<p class='placeholder'>Compose ton assiette</p>";
+                    return;
+                }
 
-                plate.forEach((id, index) => {
-
-                    const angle = (index / plate.length) * (2 * Math.PI);
-
-                    const x = centerX + radius * Math.cos(angle);
-                    const y = centerY + radius * Math.sin(angle);
+                plate.forEach((id) => {
 
                     const div = document.createElement("div");
                     div.className = "plate-item";
                     div.id = "plate-" + id;
 
-                    // 🔥 récup nom depuis DOM
                     const card = document.querySelector(`[data-id='${id}']`);
                     const name = card ? card.dataset.name : "Item";
 
                     div.textContent = name;
 
-                    div.style.left = x + "px";
-                    div.style.top = y + "px";
-
-                    // 🔥 click pour supprimer
+                    // 🔥 remove au clic
                     div.addEventListener("click", () => removeItem(id));
 
                     zone.appendChild(div);
                 });
             }
-                      function removeFromPlate(id) {
-                const el = document.getElementById("plate-" + id);
-                if (el) el.remove();
+            function removeItem(id) {
+
+                plate = plate.filter(x => x !== id);
+
+                document.querySelector(`[data-id='${id}']`)
+                    ?.classList.remove('selected');
+
+                renderPlate();
+                updateCount();
             }
 
             function updateCount() {

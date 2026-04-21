@@ -21,7 +21,12 @@ public class HomeController : Controller
         var products = await _productService.GetProductsAsync();
         return View(products);
     }
-    public async Task<IActionResult> Menu()
+    public async Task<IActionResult> MenuDuJour()
+    {
+        var products = await _productService.GetProductsAsync();
+        return View(products);
+    }
+    public async Task<IActionResult> Commander()
     {
         var products = await _productService.GetProductsAsync();
         return View(products);

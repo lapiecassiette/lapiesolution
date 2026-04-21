@@ -1,0 +1,48 @@
+﻿@using LaPieCassiette.Application.DTOs;
+@using LaPieCassiette.Domain.Models;
+
+@model Purchase
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">➕ Nouvel achat</h2>
+
+    <form method="post">
+
+        <div class="mb-3">
+            <input asp-for="Name" class="form-control" placeholder="Produit (ex: poulet)" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Quantity" class="form-control" placeholder="Quantité" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Unit" class="form-control" placeholder="Unité (kg, pièce...)" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Price" class="form-control" placeholder="Prix (€)" />
+        </div>
+
+        <div class="mb-3">
+            <select asp-for="Category"
+                    class="form-select"
+                    asp-items="Html.GetEnumSelectList<PurchaseCategory>()">
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <select asp-for="Supplier"
+                    class="form-select"
+                    asp-items="ViewBag.Suppliers">
+            </select>
+        </div>
+
+        <button class="btn btn-success w-100">
+            Enregistrer
+        </button>
+
+    </form>
+
+</div>
