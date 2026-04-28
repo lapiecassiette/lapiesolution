@@ -1,11 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using LaPieCassiette.Infrastructure.Data;
 using LaPieCassiette.Application.Services;
+using LaPieCassiette.Infrastructure.Data;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LaPieCassietteDb;Trusted_Connection=True;"));
-
+    //options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LaPieCassietteDb;Trusted_Connection=True;"));
+options.UseInMemoryDatabase("TestDb"));
 
 builder.Services.AddControllersWithViews();
 
