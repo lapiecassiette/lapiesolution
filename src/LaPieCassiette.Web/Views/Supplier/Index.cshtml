@@ -1,0 +1,73 @@
+﻿@using LaPieCassiette.Application;
+@using LaPieCassiette.Application.DTOs
+@using LaPieCassiette.Domain.Models;
+@model List<LaPieCassiette.Application.DTOs.SupplierDto>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between mb-4">
+        <h2>🏢 Fournisseurs</h2>
+
+        <a asp-action="Create" class="btn btn-dark">
+            + Ajouter
+        </a>
+    </div>
+
+    <table class="table table-hover align-middle">
+
+        <thead class="table-light">
+            <tr>
+                <th>Nom</th>
+                <th>Téléphone</th>
+                <th>Adresse</th>
+                <th style="width:120px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td><strong>@s.Name</strong></td>
+
+                    <td>
+                        @if (!string.IsNullOrEmpty(s.Phone))
+                        {
+                            <a href="tel:@s.Phone">@s.Phone</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+
+                    <td>
+                        @if (!string.IsNullOrEmpty(s.Address))
+                        {
+                            @s.Address
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@s.Id"
+                           class="btn btn-sm btn-warning">✏️</a>
+
+                        <form asp-action="Delete" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@s.Id" />
+                            <button class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Supprimer ce fournisseur ?')">
+                                🗑️
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>

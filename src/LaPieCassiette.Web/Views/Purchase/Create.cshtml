@@ -33,9 +33,10 @@
         </div>
 
         <div class="mb-3">
-            <select asp-for="Supplier"
+            <select asp-for="SupplierId"
                     class="form-select"
                     asp-items="ViewBag.Suppliers">
+                <option value="">-- Choisir un fournisseur --</option>
             </select>
         </div>
 

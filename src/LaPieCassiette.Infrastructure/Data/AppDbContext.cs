@@ -110,5 +110,9 @@ public class AppDbContext : DbContext
         .WithMany()
         .HasForeignKey(p => p.SupplierId)
         .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<UserContact>()
+        .HasOne(c => c.User)
+        .WithOne(u => u.Contact)
+        .HasForeignKey<UserContact>(c => c.UserId);
     }
 }

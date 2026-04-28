@@ -1,38 +1,41 @@
-﻿@using LaPieCassiette.Application;
-@using LaPieCassiette.Domain.Models;
-@model List<LaPieCassiette.Domain.Models.Product>;
+﻿@using LaPieCassiette.Application.DTOs
+@model List<SupplierDto>
+<div class="home-wrapper">
 
-<div class="section">
+    <div class="home-grid">
 
-<h2>Notre concept</h2>
-
-<p>
-    Des produits frais, une cuisine maison, une approche moderne de la
-    street-food revisitée.
-</p>
-</div>
-<div style="text-align:center">
-    
-    <img src="~/images/Hero.png" />
-   
-</div>
-<h2>Nos pioches</h2>
-
-<div class="d-flex flex-wrap gap-3">
-
-    @foreach (var p in Model)
-    {
-        <div style="width:220px; border:1px solid #ddd; padding:10px;">
-
-            @if (!string.IsNullOrEmpty(p.ImagePath))
-            {
-                <img src="@p.ImagePath" style="width:100%;" />
-            }
-
-            <h4>@p.Name</h4>
-            <p>@p.Description</p>
-
+        <!-- 🧠 CONCEPT -->
+        <div class="grid-item concept">
+            <div class="content">
+                <h3>Concept</h3>
+                <p>Tu composes.<br />On cuisine.</p>
+            </div>
         </div>
-    }
+
+        <!-- ⚡ COMMANDER -->
+        <a href="/Home/Commander" class="grid-item action primary">
+            <div class="content">
+                <h3>Commander</h3>
+                <p>Composer ma cassiette</p>
+            </div>
+        </a>
+
+        <!-- 🍽️ CARTE -->
+        <a href="/Home/MenuDuJour" class="grid-item action secondary">
+            <div class="content">
+                <h3>Carte</h3>
+                <p>Pioches du jour</p>
+            </div>
+        </a>
+
+        <!-- 🌿 VALEURS -->
+        <div href="/Home/Concept" class="grid-item values">
+            <div class="content">
+                <h3>Le marché à picorer</h3>
+               
+            </div>
+        </div>
+
+    </div>
 
 </div>

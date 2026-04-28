@@ -1,0 +1,26 @@
+﻿@using LaPieCassiette.Application.DTOs;
+@using LaPieCassiette.Domain.Models;
+
+@model User
+
+<div class="container mt-5">
+
+    <h2>➕ Nouveau fournisseur</h2>
+
+    <form method="post">
+
+        <div class="mb-3">
+            <input asp-for="Name" class="form-control" placeholder="Nom fournisseur" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Email" class="form-control" placeholder="Email" />
+        </div>
+
+        <button class="btn btn-success w-100">
+            Enregistrer
+        </button>
+
+    </form>
+
+</div>

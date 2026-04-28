@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using LaPieCassiette.Infrastructure.Data;
-
+using LaPieCassiette.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -15,6 +15,8 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<SupplierService>();
 var app = builder.Build();
 
 app.UseHttpsRedirection();

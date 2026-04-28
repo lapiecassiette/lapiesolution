@@ -14,5 +14,11 @@ namespace LaPieCassiette.Domain.Models
         public string Email { get; set; } = "";
 
         public UserRole Role { get; set; }
+        public UserContact? Contact { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
+
 }

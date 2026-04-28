@@ -39,7 +39,25 @@ public class PurchaseController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Purchase purchase)
     {
+        // 🔥 validation fournisseur
+        if (purchase.SupplierId == 0)
+        {
+            ModelState.AddModelError("", "Choisir un fournisseur");
+
+            // 🔁 recharger la liste sinon le select casse
+            var suppliers = await _userRepository.GetSuppliersAsync();
+
+            ViewBag.Suppliers = suppliers.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = s.Name
+            });
+
+            return View(purchase);
+        }
+
         await _repository.AddAsync(purchase);
+
         return RedirectToAction("Index");
     }
 }

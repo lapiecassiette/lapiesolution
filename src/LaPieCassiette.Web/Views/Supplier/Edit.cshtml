@@ -1,0 +1,31 @@
+﻿@using LaPieCassiette.Application.DTOs;
+@using LaPieCassiette.Domain.Models;
+@model LaPieCassiette.Application.DTOs.SupplierDto
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">✏️ Modifier fournisseur</h2>
+
+    <form asp-action="Edit" method="post">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <input asp-for="Name" class="form-control" placeholder="Nom" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Phone" class="form-control" placeholder="Téléphone" />
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Address" class="form-control" placeholder="Adresse" />
+        </div>
+
+        <button class="btn btn-success w-100">
+            💾 Enregistrer
+        </button>
+
+    </form>
+
+</div>
